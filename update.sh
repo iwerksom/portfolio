@@ -8,7 +8,9 @@ echo "→ Activating Node 22 environment..."
 source /home/iwerksom/nodevenv/schoustrup-thomsen.dk/portfolio/22/bin/activate
 
 echo "→ Pulling latest changes..."
-git pull
+git fetch origin
+git reset --hard origin/main
+git clean -fd
 
 echo "→ Installing dependencies..."
 npm install --ignore-scripts
