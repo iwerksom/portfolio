@@ -13,7 +13,4 @@ git pull
 echo "→ Installing dependencies..."
 npm install --ignore-scripts
 
-echo "→ Building Next.js..."
-npm run build
-
 echo "✓ Done! Restart the app in cPanel Node.js panel."

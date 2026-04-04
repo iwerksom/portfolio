@@ -5,7 +5,6 @@
 .yarn/install-state.gz
 
 # next.js
-/.next/
 /out/
 
 # production
