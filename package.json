@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --webpack",
-    "build": "NODE_OPTIONS='--max-old-space-size=384' next build --webpack",
+    "build": "NEXT_EXPERIMENTAL_COMPILE_WORKERS=1 NODE_OPTIONS='--max-old-space-size=512' next build --webpack",
     "start": "next start",
     "lint": "next lint"
   },
