@@ -4,17 +4,16 @@
 
 set -e
 
-echo "→ Pulling latest changes from Git..."
+echo "→ Activating Node 22 environment..."
+source /home/iwerksom/nodevenv/schoustrup-thomsen.dk/portfolio/22/bin/activate
+
+echo "→ Pulling latest changes..."
 git pull
 
-echo "→ Installing any new dependencies..."
-npm install --production=false
+echo "→ Installing dependencies..."
+npm install --ignore-scripts
 
 echo "→ Building Next.js..."
 npm run build
 
-echo "→ Restarting PM2 process..."
-pm2 restart jonas-portfolio
-
-echo "✓ Updated and restarted!"
-pm2 status
+echo "✓ Done! Restart the app in cPanel Node.js panel."
