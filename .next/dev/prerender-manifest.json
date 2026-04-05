@@ -1,11 +1,1 @@
-{
-  "version": 4,
-  "routes": {},
-  "dynamicRoutes": {},
-  "notFoundRoutes": [],
-  "preview": {
-    "previewModeId": "764393956c5920bd95d39c1816bdaafd",
-    "previewModeSigningKey": "ad72c2d6ac7c90eef86d41d8e63925b989e08c003f6ea13d29238752fb19e8e2",
-    "previewModeEncryptionKey": "6f47d7cdd9fa6f56573d82b178618720b30588e99361691135a7f9c07755d5cb"
-  }
-}
+{"version":4,"routes":{"/posts/frontend-24-years":{},"/projects/endbringers":{},"/projects/brians-origin":{},"/projects/c64-demo-1984":{},"/projects/game-over":{}},"dynamicRoutes":{"/posts/[slug]":{"dataRoute":null,"dataRouteRegex":null,"fallback":null,"fallbackRevalidate":false,"fallbackSourceRoute":"/posts/[slug]","routeRegex":"^\\/posts\\/([^/]+?)(?:\\/)?$","allowHeader":[]},"/projects/[slug]":{"dataRoute":null,"dataRouteRegex":null,"fallback":null,"fallbackRevalidate":false,"fallbackSourceRoute":"/projects/[slug]","routeRegex":"^\\/projects\\/([^/]+?)(?:\\/)?$","allowHeader":[]}},"notFoundRoutes":[],"preview":{"previewModeId":"1143a128c3b91226d742c1860bbc18d5","previewModeSigningKey":"19c16465f2a6ab7d1e3aaa5bba073570bfd3e4aaefc4ba7d07c7963e864b7dd1","previewModeEncryptionKey":"06408193089c8d26dd52129453c5eeb08041c1f8dc8af81e6627a317db629d7f"}}
