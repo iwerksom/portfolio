@@ -95,8 +95,10 @@ $localNext = (Get-Content -Raw 'node_modules\next\package.json' | ConvertFrom-Js
 $buildId = (Get-Content -Raw '.next\BUILD_ID').Trim()
 Write-Host "-> Local build: Next $localNext, build id $buildId"
 
-# Runtime needs everything in .next except these (build cache, dev server, types).
-$mask = '|cache/; dev/; diagnostics/; types/'
+# Runtime needs everything in .next except these: build cache, dev server, types, and
+# route-cache, which the running server creates itself (ISR). It must be left alone, or
+# -delete fails with "Directory not empty" while the app is writing to it.
+$mask = '|cache/; dev/; diagnostics/; types/; route-cache/'
 $preview = if ($DryRun) { ' -preview' } else { '' }
 
 $secure = Read-Host "FTP password for $FtpUser@$FtpHost" -AsSecureString
