@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import type { Project, ProjectType } from "@/lib/data";
+import { slugifyTag } from "@/lib/tags";
 import Prose from "./Prose";
 
 const TYPE_STYLES: Record<ProjectType, string> = {
@@ -47,7 +48,7 @@ export default function ProjectDetail({ project }: Props) {
         className="sticky top-0 z-40 flex items-center justify-between px-8 md:px-12 py-4 border-b border-white/[0.08] bg-bg"
       >
         <Link
-          href="/"
+          href="/#projects"
           className="flex items-center gap-3 font-mono text-2xs tracking-[0.08em] text-ink-dim hover:text-c64 transition-colors duration-200"
         >
           <span>←</span>
@@ -101,6 +102,29 @@ export default function ProjectDetail({ project }: Props) {
           <Prose markdown={project.description} />
         </motion.div>
 
+        {/* Progress timeline */}
+        {project.updates && project.updates.length > 0 && (
+          <motion.div {...fadeUp(0.22)} className="mb-12">
+            <p className="font-mono text-2xs tracking-[0.1em] uppercase text-ink-dim mb-6">
+              progress
+            </p>
+            <ol className="border-l border-white/[0.14] ml-1">
+              {project.updates.map((u, i) => (
+                <li key={`${u.date}-${i}`} className="relative pl-6 pb-8 last:pb-0">
+                  <span className="absolute -left-[5px] top-[6px] w-[9px] h-[9px] bg-c64 border border-bg" />
+                  <p className="font-mono text-2xs tracking-[0.08em] text-c64-dim mb-1">
+                    {u.date}
+                  </p>
+                  {u.title && (
+                    <p className="font-mono text-xs text-ink mb-2">{u.title}</p>
+                  )}
+                  <Prose markdown={u.body} />
+                </li>
+              ))}
+            </ol>
+          </motion.div>
+        )}
+
         {/* Divider */}
         <motion.div
           {...fadeUp(0.25)}
@@ -119,12 +143,13 @@ export default function ProjectDetail({ project }: Props) {
             </p>
             <div className="flex flex-wrap gap-2">
               {project.tools.map((tool) => (
-                <span
+                <Link
                   key={tool}
-                  className="font-mono text-2xs px-3 py-1 border border-c64-dim text-c64 bg-c64/[0.06]"
+                  href={`/tags/${slugifyTag(tool)}`}
+                  className="font-mono text-2xs px-3 py-1 border border-c64-dim text-c64 bg-c64/[0.06] hover:bg-c64/[0.16] transition-colors duration-200"
                 >
                   {tool}
-                </span>
+                </Link>
               ))}
             </div>
           </div>
@@ -146,17 +171,43 @@ export default function ProjectDetail({ project }: Props) {
           )}
         </motion.div>
 
-        {/* Image placeholder slot */}
-        <motion.div {...fadeUp(0.35)} className="mb-12">
-          <p className="font-mono text-2xs tracking-[0.1em] uppercase text-ink-dim mb-3">
-            images & media
-          </p>
-          <div className="border border-dashed border-white/[0.14] rounded-none p-12 text-center">
-            <p className="font-mono text-2xs text-ink-dim tracking-[0.06em]">
-              // images & video coming soon
+        {/* Media — hidden when the project has none */}
+        {project.media && project.media.length > 0 && (
+          <motion.div {...fadeUp(0.35)} className="mb-12">
+            <p className="font-mono text-2xs tracking-[0.1em] uppercase text-ink-dim mb-3">
+              images & media
             </p>
-          </div>
-        </motion.div>
+            <div className="flex flex-col gap-8">
+              {project.media.map((m) => (
+                <figure key={m.src}>
+                  {m.type === "video" ? (
+                    <video
+                      src={m.src}
+                      poster={m.poster}
+                      controls
+                      preload="metadata"
+                      playsInline
+                      className="w-full border border-white/[0.08]"
+                    />
+                  ) : (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={m.src}
+                      alt={m.alt ?? m.caption ?? project.title}
+                      loading="lazy"
+                      className="w-full border border-white/[0.08]"
+                    />
+                  )}
+                  {m.caption && (
+                    <figcaption className="font-mono text-2xs text-ink-dim mt-2">
+                      {m.caption}
+                    </figcaption>
+                  )}
+                </figure>
+              ))}
+            </div>
+          </motion.div>
+        )}
 
         {/* External links */}
         {project.links && project.links.length > 0 && (
@@ -186,7 +237,7 @@ export default function ProjectDetail({ project }: Props) {
           className="mt-16 pt-8 border-t border-white/[0.08]"
         >
           <Link
-            href="/"
+            href="/#projects"
             className="font-mono text-2xs tracking-[0.08em] text-ink-dim hover:text-c64 transition-colors duration-200 flex items-center gap-2"
           >
             <span>←</span>

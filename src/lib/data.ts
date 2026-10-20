@@ -26,12 +26,12 @@ export const STATS = [
     sub: "solutions · interfaces",
     small: true,
   },
-  {
+ /*  {
     label: "Currently at",
     value: "Raw Power\nLabs",
     sub: "frontend engineer",
     small: true,
-  },
+  }, */
   {
     label: "Location",
     value: "Kastrup\nDenmark",
@@ -65,6 +65,20 @@ export const AI_CARDS = [
 
 export type ProjectType = "game" | "ai" | "web" | "creative";
 
+export interface ProjectUpdate {
+  date: string; // "October 2026" — shown as the timeline label
+  title?: string;
+  body: string; // markdown
+}
+
+export interface ProjectMedia {
+  type: "image" | "video";
+  src: string; // file under /public, e.g. "/projects/endbringers/lora-test.png"
+  alt?: string;
+  caption?: string;
+  poster?: string; // video only: still frame shown before playing
+}
+
 export interface Project {
   slug: string;
   title: string;
@@ -76,9 +90,77 @@ export interface Project {
   collaborators?: string[];
   tools: string[];
   links?: { label: string; href: string }[];
+  media?: ProjectMedia[];
+  /** Dated progress notes, oldest first. Shown as a timeline under the description. */
+  updates?: ProjectUpdate[];
 }
 
 export const PROJECTS: Project[] = [
+  {
+    slug: "ghost-in-the-wreck",
+    title: "Ghost in the Wreck",
+    type: "game",
+    typeLabel: "game · small model",
+    teaser:
+      "A browser game where a 2.9M-parameter transformer, trained from scratch, runs inside the page and drives the story. No server, no API, no network.",
+    description:
+      "Ghost in the Wreck is a single-file browser game, shipped on 28 August 2026. A tiny transformer trained from scratch ships inside the page as 4 MB of int8 weights, and all inference runs client-side in about 400 lines of dependency-free JavaScript. The model is a mechanic, not decoration: it generates crew logs and ship-mind dialogue, a voiceprint classifier decides which doors open, a gibberish detector filters input, and a semantic intent judge picks the ending. The world, the voices and the corpus are hand-authored, and every system is gated by tests: a format parser, a map lint, a PyTorch-to-JavaScript parity test, a calibration harness and an adversarial playtest squad. It was the pilot game for The Wreck Works.",
+    status: "released",
+    tools: ["JavaScript", "PyTorch", "Python", "Godot", "Playwright", "Claude"],
+    links: [
+      { label: "Play the game", href: "/play/ghost-in-the-wreck/index.html" },
+      {
+        label: "GitHub",
+        href: "https://github.com/iwerksom/ghost-in-the-wreck",
+      },
+      { label: "Claude", href: "https://claude.ai" },
+    ],
+  },
+  {
+    slug: "wreck-works",
+    title: "The Wreck Works",
+    type: "ai",
+    typeLabel: "AI · tooling",
+    teaser:
+      "An LLM game factory built on one idea: the quality gates matter more than the workers, whether the worker is an LLM or a human.",
+    description:
+      "The Wreck Works grew out of building Ghost in the Wreck. Every step of making a game is defined by its input and output artifacts, two recipes (one for an LLM worker, one for a human) and a quality gate. A step is done when its gate passes, whoever or whatever did the work. The same validators that caught LLM mistakes catch human mistakes identically, so choosing between LLM and manual work becomes a per-step convenience instead of a question of trust. A Next.js control panel shows the pipeline board and runs steps with the Vercel AI SDK and Claude, while a worker daemon executes the gates in each project repo. The factory knows nothing about any particular game: a new game is a new pipeline.json. The Margin is the second project built with it.",
+    status: "in progress",
+    tools: ["Next.js", "TypeScript", "Vercel AI SDK", "Claude", "Node.js", "Python"],
+    links: [
+      { label: "GitHub", href: "https://github.com/iwerksom/wreck-works" },
+      { label: "Claude", href: "https://claude.ai" },
+    ],
+  },
+  {
+    slug: "the-margin",
+    title: "The Margin",
+    type: "game",
+    typeLabel: "game · adventure",
+    teaser:
+      "A story-first point-and-click adventure where you step inside rewritten classics and restore them, with a small bundled language model kept strictly on a leash.",
+    description:
+      "The Margin is a story-first point-and-click adventure in the spirit of Forgotton Anne, built in Unity. A young man inherits his dead father's workshop and the Colophon, a machine that lets him step inside public-domain classics that two warring powers have secretly rewritten. He restores them one episode at a time. The canon is hand-written. A small pre-trained model ships in the build, but it is fenced to three non-canonical uses (a corrupted-text register, ambient chatter and an optional free-talk sandbox), each with a hand-written fallback so the player never depends on model output. The art is produced with a ComfyUI pipeline and Blender, and the project is run through The Wreck Works, with gates for the eval set, fallback path, size and latency budget, art, audio and an adversarial playtest.",
+    status: "in progress",
+    tools: ["Unity", "ComfyUI", "Blender", "Photoshop", "Claude"],
+    links: [{ label: "Claude", href: "https://claude.ai" }],
+  },
+  {
+    slug: "arnold",
+    title: "Arnold",
+    type: "ai",
+    typeLabel: "AI · tooling",
+    teaser:
+      "A console for running Claude agents against any repo, with a durable record of what each run cost, what code it saw and what it produced.",
+    description:
+      "Arnold stands for Agent Runner, Notary, Orchestrator, Ledger, Dispatcher, and the five words are the five modules. It lists the agents a project declares in its .claude directory, lets you trigger one, streams the transcript live and keeps a record of every run. The Runner drives the Claude Agent SDK with a tool policy it cannot escape. The Notary records which code the run saw: base commit, branch, PR and ticket keys. The Orchestrator owns the registry and run tree, the Ledger enforces daily cost and token caps, and the Dispatcher validates arguments and refuses what it should. One contract has to survive every phase: the API enqueues, something else executes against a leased workspace, and runs are durable records with declared artifacts. Phase 0 is built and verified with a single Next.js app and SQLite. Later phases swap in a worker process, Postgres and a queue, and then sandboxed hosted deployment.",
+    status: "in progress",
+    tools: ["Claude Agent SDK", "Next.js", "TypeScript", "Prisma", "SQLite"],
+    links: [
+      { label: "GitHub", href: "https://github.com/iwerksom/agent-runner" },
+      { label: "Claude", href: "https://claude.ai" },
+    ],
+  },
   {
     slug: "endbringers",
     title: "Endbringers",
@@ -90,11 +172,28 @@ export const PROJECTS: Project[] = [
       "Endbringers is a 2D side-scrolling beat 'em up game co-created with my son. The project explores how AI tools change the role of a game creator — shifting from programmer to creative director. Art, concepts and assets are generated and iterated using Scenario and Gemini, while the game logic is built in Unity. Claude is used throughout for design decisions, writing and problem solving.",
     status: "in progress",
     collaborators: ["Sebastian Schoustrup-Thomsen"],
-    tools: ["Unity", "Scenario", "Claude", "Gemini"],
+    tools: ["Unity", "ComfyUI", "Blender", "Scenario", "Claude", "Gemini"],
     links: [
       { label: "Scenario", href: "https://app.scenario.com/" },
       { label: "Claude", href: "https://claude.ai" },
       { label: "Gemini", href: "https://gemini.google.com/app" },
+    ],
+    updates: [
+      {
+        date: "Before October 2026",
+        title: "Paused",
+        body: "Development stopped. With the tools we had, we could not get **consistent animations** or **side-on backgrounds** that looked like they belonged to the same game. Every generated frame was impressive on its own and wrong next to the one before it. A beat 'em up lives on that consistency, so rather than push on with a game that looked like a collage, we put it down.",
+      },
+      {
+        date: "October 2026",
+        title: "The challenge is solved",
+        body: "We found a way through by building a pipeline instead of looking for a better prompt. **ComfyUI** generates the art, **Blender** gives us control over pose and perspective, and **Claude** drives the tools and keeps the process repeatable. Unity is back in the picture as the engine.",
+      },
+      {
+        date: "October 2026",
+        title: "Training a LoRA on backgrounds",
+        body: "Right now we are selecting images to train a **LoRA** on the background style, so every location comes out in one consistent look. Choosing the training set turns out to be the real work: it is a curation job, and the taste has to come from us.",
+      },
     ],
   },
   {
@@ -151,7 +250,7 @@ export const PROJECTS: Project[] = [
 
 export const EXPERIENCE = [
   {
-    years: "2024 – now",
+    years: "2024 – 2026",
     company: "Raw Power Labs",
     role: "// frontend engineer",
     desc: "Frontend engineering with a focus on AI-powered products and platforms. Copenhagen metropolitan area.",
