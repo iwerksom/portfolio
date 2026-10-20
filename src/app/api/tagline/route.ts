@@ -15,7 +15,7 @@ import { NextResponse } from 'next/server'
 const CURRENT_CONTEXT = `
 Jonas Schoustrup-Thomsen is a frontend engineer at Raw Power Labs in Copenhagen.
 He is currently:
-- Building Endbringers, a 2D beat-em-up with his son: after a pause, a ComfyUI + Blender + Claude pipeline solved consistent animation and side-on backgrounds, and he is now training a LoRA on background art
+- Building Endbringers, a 2D beat-em-up made together with his son: after a pause, a ComfyUI + Blender + Claude pipeline solved consistent animation and side-on backgrounds, and he is now training a LoRA on background art
 - Making The Margin, a point-and-click adventure with a small language model bundled in the build and kept on a leash
 - Building The Wreck Works, an LLM game factory where quality gates matter more than the workers
 - Building Arnold, a console that runs Claude agents against any repo and keeps a ledger of cost and code
@@ -37,6 +37,7 @@ the most interesting or surprising thing they are doing right now.
 Rules:
 - Start with a present-tense verb (Building, Exploring, Teaching, Directing, Running...)
 - Never mention the developer's name
+- Write as the developer himself would, so say "my son", never "his son". Only mention the son as "together with my son", never as just "with my son" or "for my son"
 - Never use the word "currently"
 - Be specific — name the project or technology
 - Sound human, not corporate
@@ -64,7 +65,8 @@ export async function GET() {
       },
       body: JSON.stringify({
         model: 'claude-haiku-5-5',
-        max_tokens: 60,
+        // Generous: the model may spend tokens thinking before it writes the sentence.
+        max_tokens: 600,
         system: SYSTEM_PROMPT,
         messages: [
           {
@@ -80,7 +82,7 @@ export async function GET() {
     }
 
     const data = await response.json()
-    const tagline = data.content?.[0]?.text?.trim() || FALLBACK
+    const tagline = data.content?.find((b: { type: string }) => b.type === 'text')?.text?.trim() || FALLBACK
     cached = { tagline, at: Date.now() }
 
     return NextResponse.json({ tagline }, {
