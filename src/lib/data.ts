@@ -24,7 +24,7 @@ export const STATS = [
     sub: "solutions · interfaces",
     small: true,
   },
- /*  {
+  /*  {
     label: "Currently at",
     value: "Raw Power\nLabs",
     sub: "frontend engineer",
@@ -104,6 +104,15 @@ export const PROJECTS: Project[] = [
     description:
       "Ghost in the Wreck is a single-file browser game, shipped on 28 August 2026. A tiny transformer trained from scratch ships inside the page as 4 MB of int8 weights, and all inference runs client-side in about 400 lines of dependency-free JavaScript. The model is a mechanic, not decoration: it generates crew logs and ship-mind dialogue, a voiceprint classifier decides which doors open, a gibberish detector filters input, and a semantic intent judge picks the ending. The world, the voices and the corpus are hand-authored, and every system is gated by tests: a format parser, a map lint, a PyTorch-to-JavaScript parity test, a calibration harness and an adversarial playtest squad. It was the pilot game for The Wreck Works.",
     status: "released",
+    media: [
+      {
+        type: "image",
+        src: "/projects/ghost-in-the-wreck/download.png",
+        alt: "The first map of the wreck",
+        caption: "Screenshot from the version 2 of the game October 2026",
+      },
+     
+    ],
     tools: ["JavaScript", "PyTorch", "Python", "Godot", "Playwright", "Claude"],
     links: [
       { label: "Play the game", href: "/play/ghost-in-the-wreck/index.html" },
@@ -124,7 +133,14 @@ export const PROJECTS: Project[] = [
     description:
       "The Wreck Works grew out of building Ghost in the Wreck. Every step of making a game is defined by its input and output artifacts, two recipes (one for an LLM worker, one for a human) and a quality gate. A step is done when its gate passes, whoever or whatever did the work. The same validators that caught LLM mistakes catch human mistakes identically, so choosing between LLM and manual work becomes a per-step convenience instead of a question of trust. A Next.js control panel shows the pipeline board and runs steps with the Vercel AI SDK and Claude, while a worker daemon executes the gates in each project repo. The factory knows nothing about any particular game: a new game is a new pipeline.json. The Margin is the second project built with it.",
     status: "in progress",
-    tools: ["Next.js", "TypeScript", "Vercel AI SDK", "Claude", "Node.js", "Python"],
+    tools: [
+      "Next.js",
+      "TypeScript",
+      "Vercel AI SDK",
+      "Claude",
+      "Node.js",
+      "Python",
+    ],
     links: [
       { label: "GitHub", href: "https://github.com/iwerksom/wreck-works" },
       { label: "Claude", href: "https://claude.ai" },
@@ -140,6 +156,15 @@ export const PROJECTS: Project[] = [
     description:
       "The Margin is a story-first point-and-click adventure in the spirit of Forgotton Anne, built in Unity. A young man inherits his dead father's workshop and the Colophon, a machine that lets him step inside public-domain classics that two warring powers have secretly rewritten. He restores them one episode at a time. The canon is hand-written. A small pre-trained model ships in the build, but it is fenced to three non-canonical uses (a corrupted-text register, ambient chatter and an optional free-talk sandbox), each with a hand-written fallback so the player never depends on model output. The art is produced with a ComfyUI pipeline and Blender, and the project is run through The Wreck Works, with gates for the eval set, fallback path, size and latency budget, art, audio and an adversarial playtest.",
     status: "in progress",
+     media: [
+      {
+        type: "image",
+        src: "/projects/margin/theo_character_sheet_v2_preview.jpg",
+        alt: "Character sheet of Theo",
+        caption: "Version 2 of the character sheet October 2026",
+      },
+     
+    ],
     tools: ["Unity", "ComfyUI", "Blender", "Photoshop", "Claude"],
     links: [{ label: "Claude", href: "https://claude.ai" }],
   },
