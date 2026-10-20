@@ -70,8 +70,4 @@ C64-inspired color palette defined in `tailwind.config.ts`:
 
 ## Deployment
 
-```bash
-npm run build
-```
-
-Deploy to [Vercel](https://vercel.com) by connecting your GitHub repo — zero config needed for Next.js.
+Hosted on Nordic Way. The server cannot build, so the site is built locally and `.next` is uploaded over FTP. See [DEPLOY.md](DEPLOY.md) for the steps, the `deploy-local.ps1` options and what to do when it goes wrong.
