@@ -33,6 +33,7 @@ param(
   [string]$FtpUser = 'iwerksom',
   [string]$RemoteApp = '/schoustrup-thomsen.dk/portfolio',
   [string]$SiteUrl = 'https://www.schoustrup-thomsen.dk',
+  [string]$NodeVenvModules = '/nodevenv/schoustrup-thomsen.dk/portfolio/22/lib/node_modules',
   [string]$WinScp = "$env:LOCALAPPDATA\Programs\WinSCP\WinSCP.com"
 )
 
@@ -103,13 +104,13 @@ $env:WINSCP_FTP_PASSWORD = [System.Net.NetworkCredential]::new('', $secure).Pass
 $open = "open ftpes://$FtpUser@$FtpHost/ -password=`"%WINSCP_FTP_PASSWORD%`""
 
 # Runs a WinSCP script made of the given command lines (after the common header).
-function Invoke-WinScp([string[]]$Commands) {
+function Invoke-WinScp([string[]]$Commands, [switch]$AllowFailure) {
   $file = New-TemporaryFile
   try {
     (@('option batch abort', 'option confirm off', $open) + $Commands + 'exit') |
       Set-Content -Path $file -Encoding ASCII
     & $WinScp "/script=$file"
-    if ($LASTEXITCODE -ne 0) { throw "WinSCP failed (exit $LASTEXITCODE)." }
+    if ($LASTEXITCODE -ne 0 -and -not $AllowFailure) { throw "WinSCP failed (exit $LASTEXITCODE)." }
   } finally {
     Remove-Item $file -ErrorAction SilentlyContinue
   }
@@ -117,6 +118,7 @@ function Invoke-WinScp([string[]]$Commands) {
 
 $exit = 0
 $serverNextFile = Join-Path ([System.IO.Path]::GetTempPath()) "server-next-package-$([guid]::NewGuid()).json"
+$serverNextFile2 = Join-Path ([System.IO.Path]::GetTempPath()) "server-next-package-$([guid]::NewGuid()).json"
 try {
   $sync = "synchronize remote -delete$preview -filemask=`"$mask`" `"$PWD\.next`" `"$RemoteApp/.next`""
   if ($DryRun) {
@@ -127,17 +129,21 @@ try {
   }
 
   Write-Host "-> Uploading .next to $RemoteApp/.next ..."
-  # Reading the server's Next version must not abort the run if the path is not reachable by FTP.
-  Invoke-WinScp @(
-    $sync,
-    'option batch continue',
-    "get `"$RemoteApp/node_modules/next/package.json`" `"$serverNextFile`""
-  )
+  Invoke-WinScp @($sync)
   Write-Host "-> Upload done (build id $buildId)."
 
   # --- Version check: the build and the server's installed Next must match. ---
-  if (Test-Path $serverNextFile) {
-    $serverNext = (Get-Content -Raw $serverNextFile | ConvertFrom-Json).version
+  # cPanel's node_modules is a symlink that FTP often cannot follow, so also try the real
+  # location. A failed read here only produces a warning, never aborts the deploy.
+  Write-Host '-> Reading the server''s installed Next version...'
+  Invoke-WinScp -AllowFailure @(
+    'option batch continue',
+    "get `"$RemoteApp/node_modules/next/package.json`" `"$serverNextFile`"",
+    "get `"$NodeVenvModules/next/package.json`" `"$serverNextFile2`""
+  ) 2>&1 | Out-Null
+  $found = @($serverNextFile, $serverNextFile2) | Where-Object { Test-Path $_ } | Select-Object -First 1
+  if ($found) {
+    $serverNext = (Get-Content -Raw $found | ConvertFrom-Json).version
     if ($serverNext -ne $localNext) {
       Write-Host ""
       Write-Host "!! VERSION MISMATCH: built with Next $localNext, server has Next $serverNext." -ForegroundColor Red
@@ -148,7 +154,7 @@ try {
       Write-Host "-> Next version matches the server ($serverNext)." -ForegroundColor Green
     }
   } else {
-    Write-Warning "Could not read the server's node_modules/next/package.json over FTP. Check it on the server: node -e ""console.log(require('next/package.json').version)"" (expect $localNext)."
+    Write-Warning "Could not read the server's Next version over FTP (symlinked node_modules). The upload itself is done. Check it on the server: bash update.sh prints it, or node -e ""console.log(require('next/package.json').version)"" (expect $localNext)."
   }
 
   if ($Restart -and $exit -eq 0) {
@@ -169,6 +175,6 @@ try {
   }
 } finally {
   Remove-Item Env:\WINSCP_FTP_PASSWORD -ErrorAction SilentlyContinue
-  Remove-Item $serverNextFile -ErrorAction SilentlyContinue
+  Remove-Item $serverNextFile, $serverNextFile2 -ErrorAction SilentlyContinue
 }
 exit $exit
