@@ -7,6 +7,7 @@ import Stack from "@/components/Stack";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import Posts from "@/components/Posts";
+import GithubFeed from "@/components/GithubFeed";
 
 export default function Home() {
   return (
@@ -16,6 +17,7 @@ export default function Home() {
       <AIFocus />
       <Projects />
       <Posts />
+      <GithubFeed />
       <Experience />
       <Stack />
       <Contact />

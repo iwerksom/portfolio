@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { NAV_LINKS } from "@/lib/data";
+import GenerativeTagline from "./GenerativeTagline";
 
 export default function Nav() {
   return (
@@ -57,12 +58,7 @@ export default function Nav() {
 
       {/* Status */}
       <div className="flex items-center gap-2 font-mono text-2xs tracking-[0.06em] text-c64">
-        <motion.span
-          className="w-[7px] h-[7px] rounded-full bg-c64 shrink-0"
-          animate={{ opacity: [1, 0.3, 1] }}
-          transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-        />
-        working on 2d beat em up game with Unity
+        <GenerativeTagline />
       </div>
     </motion.nav>
   );
