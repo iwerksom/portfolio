@@ -28,6 +28,24 @@ function timeAgo(dateStr: string): string {
   return `${Math.floor(days / 365)}y ago`
 }
 
+/** A link for public items; a plain row for private-repo activity, which has no url. */
+function Row({
+  url,
+  className,
+  children,
+}: {
+  url?: string
+  className: string
+  children: React.ReactNode
+}) {
+  if (!url) return <div className={className}>{children}</div>
+  return (
+    <a href={url} target="_blank" rel="noopener noreferrer" className={className}>
+      {children}
+    </a>
+  )
+}
+
 export default function GithubFeed() {
   const [items, setItems] = useState<GithubItem[]>([])
   const [loading, setLoading] = useState(true)
@@ -104,11 +122,9 @@ export default function GithubFeed() {
 
         <div className="py-8 md:py-12 px-6 md:px-10 space-y-px">
           {items.map((item, i) => (
-            <a
+            <Row
               key={i}
-              href={item.url}
-              target="_blank"
-              rel="noopener noreferrer"
+              url={item.url}
               className="group flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-4 py-3 border-b border-white/[0.06] hover:border-white/[0.14] transition-colors duration-200"
             >
               <span className="font-mono text-[10px] tracking-widest text-ink-dim shrink-0 w-20">
@@ -129,10 +145,12 @@ export default function GithubFeed() {
                 {item.title}
               </span>
 
-              <span className="font-mono text-xs text-c64/0 group-hover:text-c64 transition-all duration-200 shrink-0">
-                view ↗
-              </span>
-            </a>
+              {item.url && (
+                <span className="font-mono text-xs text-c64/0 group-hover:text-c64 transition-all duration-200 shrink-0">
+                  view ↗
+                </span>
+              )}
+            </Row>
           ))}
 
           <p className="font-mono text-[10px] text-ink-dim pt-4">

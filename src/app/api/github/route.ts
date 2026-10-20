@@ -9,7 +9,12 @@ import { NextResponse } from "next/server";
  * No API key required for public repos (60 req/hr unauthenticated).
  * Set GITHUB_TOKEN env var for 5000 req/hr if you ever need it.
  *
- * To configure which repos to watch, edit REPOS below.
+ * Private repos (PRIVATE_REPOS) are read with GITHUB_TOKEN, a fine-grained
+ * read-only token, and reduced server-side to "N commits this week" under a
+ * label of your choosing. Titles, messages, links and the real repo name never
+ * leave the server. Without a token they are skipped.
+ *
+ * To configure which repos to watch, edit REPOS and PRIVATE_REPOS below.
  */
 
 const GITHUB_USERNAME = "iwerksom";
@@ -23,12 +28,20 @@ const REPOS: string[] = [
   "c64Demo",
 ];
 
+// Private repos: only the label and a commit count are ever published.
+const PRIVATE_REPOS: { repo: string; label: string }[] = [
+  { repo: "the-margin", label: "the-margin" },
+  { repo: "endbringers-game", label: "endbringers" },
+];
+
+const ACTIVITY_WINDOW_DAYS = 7;
+
 export interface GithubItem {
   repo: string;
-  type: "release" | "commit";
+  type: "release" | "commit" | "activity";
   title: string;
   date: string;
-  url: string;
+  url?: string; // absent for private-repo activity, which is not linkable
   tag?: string;
 }
 
@@ -89,6 +102,37 @@ async function getRepoActivity(repo: string): Promise<GithubItem[]> {
   return items;
 }
 
+async function getPrivateActivity(
+  repo: string,
+  label: string,
+): Promise<GithubItem[]> {
+  if (!process.env.GITHUB_TOKEN) return [];
+  try {
+    const since = new Date(
+      Date.now() - ACTIVITY_WINDOW_DAYS * 86400000,
+    ).toISOString();
+    const res = await fetchWithToken(
+      `https://api.github.com/repos/${GITHUB_USERNAME}/${repo}/commits?since=${since}&per_page=100`,
+    );
+    if (!res.ok) return [];
+    const list = await res.json();
+    const commits: number = Array.isArray(list) ? list.length : 0;
+    const latest: string =
+      list[0]?.commit?.committer?.date ?? list[0]?.commit?.author?.date ?? "";
+    if (commits === 0 || !latest) return [];
+    return [
+      {
+        repo: label,
+        type: "activity",
+        title: `${commits} commit${commits === 1 ? "" : "s"} this week`,
+        date: latest,
+      },
+    ];
+  } catch {
+    return [];
+  }
+}
+
 export async function GET() {
   if (REPOS.length === 0) {
     return NextResponse.json({
@@ -98,7 +142,10 @@ export async function GET() {
   }
 
   try {
-    const results = await Promise.allSettled(REPOS.map(getRepoActivity));
+    const results = await Promise.allSettled([
+      ...REPOS.map(getRepoActivity),
+      ...PRIVATE_REPOS.map((r) => getPrivateActivity(r.repo, r.label)),
+    ]);
     const items: GithubItem[] = results
       .flatMap((r) => (r.status === "fulfilled" ? r.value : []))
       .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
