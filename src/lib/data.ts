@@ -84,7 +84,17 @@ export interface Project {
   typeLabel: string;
   teaser: string;
   description: string;
-  status: "in progress" | "released" | "concept";
+  /**
+   * Manual baseline. "released" is final. Otherwise, when `repo` is set, the site shows
+   * "in progress" only while that repo had pull request activity in the last week
+   * (see lib/projectStatus.ts); this value is the fallback when GitHub is unreachable
+   * and the status for projects without a repo.
+   */
+  status: "in progress" | "released" | "concept" | "on hold";
+  /** GitHub repo name under the owner account (private repos need GITHUB_TOKEN). */
+  repo?: string;
+  /** Latest milestone, shown instead of "on hold" while the project is quiet. */
+  milestone?: string;
   collaborators?: string[];
   tools: string[];
   links?: { label: string; href: string }[];
@@ -96,6 +106,7 @@ export interface Project {
 export const PROJECTS: Project[] = [
   {
     slug: "ghost-in-the-wreck",
+    repo: "ghost-in-the-wreck",
     title: "Ghost in the Wreck",
     type: "game",
     typeLabel: "game · small model",
@@ -125,6 +136,7 @@ export const PROJECTS: Project[] = [
   },
   {
     slug: "wreck-works",
+    repo: "wreck-works",
     title: "The Wreck Works",
     type: "ai",
     typeLabel: "AI · tooling",
@@ -148,6 +160,7 @@ export const PROJECTS: Project[] = [
   },
   {
     slug: "the-margin",
+    repo: "the-margin",
     title: "The Margin",
     type: "game",
     typeLabel: "game · adventure",
@@ -170,6 +183,7 @@ export const PROJECTS: Project[] = [
   },
   {
     slug: "arnold",
+    repo: "agent-runner",
     title: "Arnold",
     type: "ai",
     typeLabel: "AI · tooling",
@@ -186,6 +200,8 @@ export const PROJECTS: Project[] = [
   },
   {
     slug: "endbringers",
+    repo: "endbringers-game",
+    milestone: "pipeline solved · Oct 2026",
     title: "Endbringers",
     type: "game",
     typeLabel: "game",
@@ -221,6 +237,7 @@ export const PROJECTS: Project[] = [
   },
   {
     slug: "brians-origin",
+    repo: "brians-origin-story",
     title: "Brian's Origin",
     type: "creative",
     typeLabel: "comic",

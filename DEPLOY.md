@@ -47,6 +47,7 @@ Changed an environment variable in cPanel (`ANTHROPIC_API_KEY`, `GITHUB_TOKEN`)?
 | FTP says "Lost connection" mid-upload | | Normal on this host. WinSCP reconnects and resumes |
 | Tagline shows the fallback line | cPanel env vars | `ANTHROPIC_API_KEY` missing, or app not restarted after adding it |
 | GitHub feed has no private-repo rows | cPanel env vars | `GITHUB_TOKEN` missing |
+| A private project always shows its manual status | `GITHUB_TOKEN` permissions | The token needs **Pull requests: Read** (and Contents: Read for the feed) on `the-margin`, `endbringers-game` and `brians-origin-story` |
 
 Run the server directly to see a startup error:
 ```bash

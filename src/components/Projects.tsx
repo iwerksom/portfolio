@@ -5,6 +5,7 @@ import { motion } from 'framer-motion'
 import SectionShell from '@/components/SectionShell'
 import FadeUp from '@/components/FadeUp'
 import { PROJECTS, type ProjectType } from '@/lib/data'
+import { sortByStatus, type ResolvedStatus, type StatusKey } from '@/lib/projectStatus'
 
 const TYPE_STYLES: Record<ProjectType, string> = {
   game:     'border-c64-dim text-c64',
@@ -13,17 +14,25 @@ const TYPE_STYLES: Record<ProjectType, string> = {
   creative: 'border-[#D4537E] text-[#D4537E]',
 }
 
-const STATUS_STYLES = {
+const STATUS_STYLES: Record<StatusKey, string> = {
+  released: 'text-[#5DCAA5]',
   'in progress': 'text-c64-dim',
-  'released':    'text-[#5DCAA5]',
-  'concept':     'text-ink-dim',
+  milestone: 'text-ink-dim',
+  'on hold': 'text-ink-dim',
+  concept: 'text-ink-dim',
 }
 
-export default function Projects() {
+interface Props {
+  statuses: Record<string, ResolvedStatus>
+}
+
+export default function Projects({ statuses }: Props) {
   return (
     <SectionShell id="projects" label="Projects">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-px bg-white/[0.08] border border-white/[0.08]">
-        {PROJECTS.map((project, i) => (
+        {sortByStatus(PROJECTS, statuses).map((project, i) => {
+          const status = statuses[project.slug]
+          return (
           <FadeUp key={project.slug} delay={i * 0.08}>
             <Link
               href={`/projects/${project.slug}`}
@@ -34,8 +43,8 @@ export default function Projects() {
                 <span className={`font-mono text-2xs tracking-[0.1em] uppercase border px-2 py-[3px] ${TYPE_STYLES[project.type]}`}>
                   {project.typeLabel}
                 </span>
-                <span className={`font-mono text-2xs tracking-[0.06em] ${STATUS_STYLES[project.status]}`}>
-                  {project.status}
+                <span className={`font-mono text-2xs tracking-[0.06em] ${STATUS_STYLES[status.key]}`}>
+                  {status.label}
                 </span>
               </div>
 
@@ -74,7 +83,8 @@ export default function Projects() {
               </div>
             </Link>
           </FadeUp>
-        ))}
+          )
+        })}
       </div>
     </SectionShell>
   )

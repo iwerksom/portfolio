@@ -8,14 +8,20 @@ import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import Posts from "@/components/Posts";
 import GithubFeed from "@/components/GithubFeed";
+import { getProjectStatuses } from "@/lib/projectActivity";
 
-export default function Home() {
+// Re-check GitHub pull request activity at most every 5 minutes.
+export const revalidate = 300;
+
+export default async function Home() {
+  const statuses = await getProjectStatuses();
+
   return (
     <main>
       <Nav />
       <Hero />
       <AIFocus />
-      <Projects />
+      <Projects statuses={statuses} />
       <Posts />
       <GithubFeed />
       <Experience />

@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import type { Project, ProjectType } from "@/lib/data";
+import type { ResolvedStatus, StatusKey } from "@/lib/projectStatus";
 import { slugifyTag } from "@/lib/tags";
 import Prose from "./Prose";
 
@@ -14,9 +15,11 @@ const TYPE_STYLES: Record<ProjectType, string> = {
   creative: "border-[#D4537E] text-[#D4537E]",
 };
 
-const STATUS_STYLES = {
-  "in progress": "text-c64-dim",
+const STATUS_STYLES: Record<StatusKey, string> = {
   released: "text-[#5DCAA5]",
+  "in progress": "text-c64-dim",
+  milestone: "text-ink-dim",
+  "on hold": "text-ink-dim",
   concept: "text-ink-dim",
 };
 
@@ -28,9 +31,10 @@ const fadeUp = (delay: number) => ({
 
 interface Props {
   project: Project;
+  status: ResolvedStatus;
 }
 
-export default function ProjectDetail({ project }: Props) {
+export default function ProjectDetail({ project, status }: Props) {
   return (
     <div className="min-h-screen bg-bg text-ink font-sans">
       {/* Scanline overlay */}
@@ -75,9 +79,9 @@ export default function ProjectDetail({ project }: Props) {
             {project.typeLabel}
           </span>
           <span
-            className={`font-mono text-2xs tracking-[0.06em] ${STATUS_STYLES[project.status]}`}
+            className={`font-mono text-2xs tracking-[0.06em] ${STATUS_STYLES[status.key]}`}
           >
-            {project.status}
+            {status.label}
           </span>
         </motion.div>
 
