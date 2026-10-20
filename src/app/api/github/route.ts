@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { fetchWithToken, GITHUB_USERNAME } from "@/lib/github";
 
 /**
  * GET /api/github
@@ -16,8 +17,6 @@ import { NextResponse } from "next/server";
  *
  * To configure which repos to watch, edit REPOS and PRIVATE_REPOS below.
  */
-
-const GITHUB_USERNAME = "iwerksom";
 
 const REPOS: string[] = [
   // Public repos only — this feed links straight to them.
@@ -45,17 +44,6 @@ export interface GithubItem {
   date: string;
   url?: string; // absent for private-repo activity, which is not linkable
   tag?: string;
-}
-
-async function fetchWithToken(url: string) {
-  const headers: Record<string, string> = {
-    Accept: "application/vnd.github+json",
-    "X-GitHub-Api-Version": "2022-11-28",
-  };
-  if (process.env.GITHUB_TOKEN) {
-    headers["Authorization"] = `Bearer ${process.env.GITHUB_TOKEN}`;
-  }
-  return fetch(url, { headers, next: { revalidate: 300 } });
 }
 
 async function getRepoActivity(repo: string): Promise<GithubItem[]> {
