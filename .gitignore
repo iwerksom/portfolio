@@ -31,3 +31,7 @@ next-env.d.ts
 
 # next.js build/dev cache
 /.next/
+
+# server-side files that git clean -fd must not delete (Nordic Way / Passenger)
+/stderr.log
+/tmp/
