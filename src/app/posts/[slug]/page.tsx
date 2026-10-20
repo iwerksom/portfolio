@@ -30,7 +30,7 @@ export default async function PostPage({ params }: Props) {
         {/* back */}
         <Link
           href="/#posts"
-          className="font-mono text-[10px] tracking-[0.08em] text-text-dim hover:text-c64 transition-colors duration-200 flex items-center gap-2 mb-12"
+          className="font-mono text-[10px] tracking-[0.08em] text-ink-dim hover:text-c64 transition-colors duration-200 flex items-center gap-2 mb-12"
         >
           ← posts
         </Link>
@@ -38,17 +38,17 @@ export default async function PostPage({ params }: Props) {
         {/* header */}
         <header className="mb-12 pb-8 border-b border-white/[0.08]">
           <div className="flex items-center gap-3 mb-4">
-            <span className="font-mono text-[10px] px-1.5 py-0.5 border border-white/10 text-text-dim">
+            <span className="font-mono text-[10px] px-1.5 py-0.5 border border-white/10 text-ink-dim">
               {post.tag}
             </span>
-            <span className="font-mono text-[10px] text-text-dim">{post.date}</span>
+            <span className="font-mono text-[10px] text-ink-dim">{post.date}</span>
           </div>
 
-          <h1 className="font-mono text-lg md:text-xl text-text leading-snug tracking-tight">
+          <h1 className="font-mono text-lg md:text-xl text-ink leading-snug tracking-tight">
             {post.title}
           </h1>
 
-          <p className="mt-3 text-sm text-text-dim leading-relaxed">
+          <p className="mt-3 text-sm text-ink-dim leading-relaxed">
             {post.teaser}
           </p>
         </header>
@@ -60,7 +60,7 @@ export default async function PostPage({ params }: Props) {
         <div className="mt-16 pt-8 border-t border-white/[0.08]">
           <Link
             href="/#posts"
-            className="font-mono text-[10px] tracking-[0.08em] text-text-dim hover:text-c64 transition-colors duration-200 flex items-center gap-2"
+            className="font-mono text-[10px] tracking-[0.08em] text-ink-dim hover:text-c64 transition-colors duration-200 flex items-center gap-2"
           >
             ← back to posts
           </Link>

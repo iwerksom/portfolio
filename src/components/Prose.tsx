@@ -30,7 +30,7 @@ function parseInline(text: string): ReactNode[] {
 
     if (m[0].startsWith("**")) {
       nodes.push(
-        <strong key={m.index} className="font-medium text-text">
+        <strong key={m.index} className="font-medium text-ink">
           {m[2]}
         </strong>,
       );
@@ -45,7 +45,7 @@ function parseInline(text: string): ReactNode[] {
       );
     } else if (m[0].startsWith("_")) {
       nodes.push(
-        <em key={m.index} className="italic text-text-mid">
+        <em key={m.index} className="italic text-ink-mid">
           {m[3]}
         </em>,
       );
@@ -146,7 +146,7 @@ export default function Prose({ markdown, className = "" }: ProseProps) {
     blocks = parseBlocks(markdown ?? "");
   } catch {
     return (
-      <p className={`text-text-mid text-sm leading-relaxed ${className}`}>
+      <p className={`text-ink-mid text-sm leading-relaxed ${className}`}>
         {markdown}
       </p>
     );
@@ -169,7 +169,7 @@ export default function Prose({ markdown, className = "" }: ProseProps) {
             return (
               <h3
                 key={idx}
-                className="font-mono text-xs tracking-widest uppercase text-text-mid mt-6 first:mt-0"
+                className="font-mono text-xs tracking-widest uppercase text-ink-mid mt-6 first:mt-0"
               >
                 {block.text}
               </h3>
@@ -180,7 +180,7 @@ export default function Prose({ markdown, className = "" }: ProseProps) {
                 {block.items.map((item, j) => (
                   <li
                     key={j}
-                    className="relative text-text-mid text-sm leading-relaxed before:absolute before:-left-4 before:content-['—'] before:text-c64/60"
+                    className="relative text-ink-mid text-sm leading-relaxed before:absolute before:-left-4 before:content-['—'] before:text-c64/60"
                   >
                     {parseInline(item)}
                   </li>
@@ -193,7 +193,7 @@ export default function Prose({ markdown, className = "" }: ProseProps) {
                 {block.items.map((item, j) => (
                   <li
                     key={j}
-                    className="relative text-text-mid text-sm leading-relaxed"
+                    className="relative text-ink-mid text-sm leading-relaxed"
                   >
                     <span className="absolute -left-4 font-mono text-c64/60 text-xs">
                       {j + 1}.
@@ -206,7 +206,7 @@ export default function Prose({ markdown, className = "" }: ProseProps) {
           case "p":
           default:
             return (
-              <p key={idx} className="text-text-mid text-sm leading-relaxed">
+              <p key={idx} className="text-ink-mid text-sm leading-relaxed">
                 {parseInline(block.text)}
               </p>
             );

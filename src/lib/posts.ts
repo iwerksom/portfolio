@@ -25,23 +25,39 @@ export const POSTS: Post[] = [
     teaser:
       "The story of how frontend went from designing layout with HTML tables to directing AI agents to write the code for you.",
     body: `
-## 2001 — tables all the way down
+## 2002 — tables all the way down
 
-When I started building websites in 2001, the word "frontend" barely existed.
+When I started building websites in 2002, the word "frontend" barely existed.
 We were webmasters. We sliced Photoshop files into GIFs and reassembled them inside \`<table>\` cells.
 Nested tables, spacer GIFs, \`bgcolor\` attributes. The browser was a tyrant and we bowed to it.
 
 Internet Explorer 6 was the law. If it worked in IE6, it shipped.
 If it looked broken in Netscape 4, you noted it in the README and moved on.
 
+## Flash — the parallel track
+
+Alongside the tables there was Flash, and I met it before I met the web proper.
+I learned it during my education, and my last project there was interactive video, built in Flash.
+That was around 2002, which tells you how early it was already a serious tool.
+Timelines, tweens, ActionScript. It was the only place where you could be a designer, an animator and a programmer at the same time,
+and what you drew on the stage was exactly what the user got. No browser quirks. No IE6.
+
+Later I built whole mini websites in Flash for Cafeteatret, as promotion for their theatre productions.
+Each production got its own little world, with video, sound and all kinds of user interaction.
+It was the kind of site that could not have existed as HTML at the time.
+
+Then the iPhone arrived without a Flash plugin, HTML5 and CSS3 grew up, and the ecosystem faded out.
+What stayed with me is the feeling of owning the whole experience, from the first pixel to the last interaction.
+I still chase that feeling today, just with different tools.
+
 ## 2005 — the web standards revolution
 
-Then a small group of designers started writing manifestos.
+Meanwhile, back in HTML land, a small group of designers had started writing manifestos.
 Zeldman. CSS Zen Garden. The Web Standards Project.
 The argument was simple: _separate structure from presentation_.
 
 I remember converting my first site from tables to CSS floats.
-It took a week. It broke three times. It was the most satisfying thing I had done professionally.
+It took a week. It broke three times. It was mind blowing.
 
 ## 2010 — jQuery and the illusion of interactivity
 
@@ -76,9 +92,9 @@ The craft was still there — but it lived inside a much larger machine.
 
 Something shifted again when the LLMs got good enough to write code.
 
-At first I used them like a smarter autocomplete.
+At first I used them like a smarter autocomplete or a replacement for Stackoverflow.
 Then I started treating them like a junior developer I could pair-program with.
-Then — working on projects like [Endbringers](/projects/endbringers) and [Game Over](/projects/game-over) —
+Then — working on projects like [Endbringers](/projects/endbringers) and [Brians Origin](/projects/brians-origin) —
 I realised the role had changed again.
 
 You are no longer always the person who writes the code.
@@ -96,7 +112,7 @@ Having empathy for the person on the other side of the screen.
 
 None of that was automated. All of it still matters.
 
-24 years in, I am more interested in what comes next than I have ever been.
+24 years in, I am still interested in what comes next and how it can enable us to build great apps.
     `,
   },
 ];

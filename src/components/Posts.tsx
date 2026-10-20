@@ -10,7 +10,7 @@ export default function Posts() {
         {/* vertical label */}
         <div className="border-r border-white/[0.08] flex items-start justify-center pt-8 md:pt-12">
           <span
-            className="font-mono text-[10px] tracking-[0.2em] uppercase text-text-dim"
+            className="font-mono text-[10px] tracking-[0.2em] uppercase text-ink-dim"
             style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}
           >
             Posts
@@ -25,15 +25,15 @@ export default function Posts() {
               href={`/posts/${post.slug}`}
               className="group flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-4 py-4 border-b border-white/[0.06] hover:border-white/[0.14] transition-colors duration-200"
             >
-              <span className="font-mono text-[10px] tracking-widest text-text-dim shrink-0 w-20">
+              <span className="font-mono text-[10px] tracking-widest text-ink-dim shrink-0 w-20">
                 {post.date}
               </span>
 
-              <span className="font-mono text-[10px] px-1.5 py-0.5 border border-white/10 text-text-dim shrink-0 self-start">
+              <span className="font-mono text-[10px] px-1.5 py-0.5 border border-white/10 text-ink-dim shrink-0 self-start">
                 {post.tag}
               </span>
 
-              <span className="flex-1 text-sm text-text-mid group-hover:text-text transition-colors duration-200">
+              <span className="flex-1 text-sm text-ink-mid group-hover:text-ink transition-colors duration-200">
                 {post.title}
               </span>
 
