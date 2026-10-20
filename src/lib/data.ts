@@ -1,5 +1,3 @@
-import { s } from "framer-motion/client";
-
 export const NAV_LINKS = [
   { href: "#ai", label: "ai focus" },
   { href: "#projects", label: "projects" },
