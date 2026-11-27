@@ -208,14 +208,15 @@ export const PROJECTS: Project[] = [
     teaser:
       "2D side-scrolling beat 'em up built with Unity and AI tools — exploring what it means to direct a game rather than code it.",
     description:
-      "Endbringers is a 2D side-scrolling beat 'em up game co-created with my son. The project explores how AI tools change the role of a game creator — shifting from programmer to creative director. Art, concepts and assets are generated and iterated using Scenario and Gemini, while the game logic is built in Unity. Claude is used throughout for design decisions, writing and problem solving.",
+      "Endbringers is a 2D side-scrolling beat 'em up game co-created with my son. The project explores how AI tools change the role of a game creator — shifting from programmer to creative director. The art comes from a pipeline rather than a prompt: ComfyUI generates it, Blender controls pose and perspective for 3D-to-2D sprites, and a style LoRA trained with Kohya on our own captioned images holds the backgrounds to one look. The game logic is built in Unity, and Claude drives the tools and keeps the process repeatable.",
     status: "in progress",
     collaborators: ["Sebastian Schoustrup-Thomsen"],
-    tools: ["Unity", "ComfyUI", "Blender", "Scenario", "Claude", "Gemini"],
+    tools: ["Unity", "ComfyUI", "Kohya", "Blender", "Claude"],
     links: [
-      { label: "Scenario", href: "https://app.scenario.com/" },
+      { label: "ComfyUI", href: "https://www.comfy.org/" },
+      { label: "Kohya", href: "https://github.com/bmaltais/kohya_ss" },
+      { label: "Blender", href: "https://www.blender.org/" },
       { label: "Claude", href: "https://claude.ai" },
-      { label: "Gemini", href: "https://gemini.google.com/app" },
     ],
     updates: [
       {
